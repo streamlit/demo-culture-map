@@ -4,6 +4,7 @@ import streamlit as st
 
 from culture_map import country_data
 from culture_map import distance_calculations
+from culture_map import visualisation
 
 DEFAULT_COUNTRY_NUMBER = 4
 
@@ -28,7 +29,11 @@ st.write('You selected:', selected_countries_names)
 selected_countries = [country for country in all_countries.values() if country.title in selected_countries_names]
 
 distances, max_distance = distance_calculations.compute_distances(selected_countries)
-st.write('Before normalisation:', distances)
+st.write('Country distances before normalisation:', distances)
 
 normalised_distances = distance_calculations.normalise_distance_matrix(distances, max_distance)
-st.write('After normalisation:', normalised_distances)
+st.write('Country distances after normalisation:', normalised_distances)
+
+show_clusters = st.checkbox('Show clusters', value=True)
+heatmap = visualisation.generate_heatmap(normalised_distances, show_clusters)
+st.pyplot(heatmap)
