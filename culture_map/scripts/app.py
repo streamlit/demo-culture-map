@@ -27,5 +27,8 @@ st.write('You selected:', selected_countries_names)
 
 selected_countries = [country for country in all_countries.values() if country.title in selected_countries_names]
 
-df = distance_calculations.compute_distances(selected_countries)
-st.write(df)
+distances, max_distance = distance_calculations.compute_distances(selected_countries)
+st.write('Before normalisation:', distances)
+
+normalised_distances = distance_calculations.normalise_distance_matrix(distances, max_distance)
+st.write('After normalisation:', normalised_distances)
