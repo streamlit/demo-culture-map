@@ -25,24 +25,29 @@ selected_countries_names = st.multiselect(
     all_countries_names,
     st.session_state["default_countries"])
 
-st.write('You selected:', selected_countries_names)
-
 selected_countries = [country for country in all_countries.values() if country.title in selected_countries_names]
+
+raw_data = st.expander("See raw data about selected countries")
+
+dimensions = distance_calculations.compute_dimensions(selected_countries)
+raw_data.write('Dimensions:')
+raw_data.write(dimensions)
+
+radar = visualisation.generate_radar_plot(dimensions)
+st.pyplot(radar)
 
 distance_metric = st.selectbox('What distance metric would you like to use?',
                                list(distance_calculations.AVAILABLE_DISTANCES.keys()))
 
+raw_calculations = st.expander("See raw calculations")
+
 distances, max_distance = distance_calculations.compute_distances(selected_countries, distance_metric)
-st.write('Country distances before normalisation:', distances)
+raw_calculations.write('Country distances before normalisation:')
+raw_calculations.write(distances)
 
 normalised_distances = distance_calculations.normalise_distance_matrix(distances, max_distance)
-st.write('Country distances after normalisation:', normalised_distances)
-
-dimensions = distance_calculations.compute_dimensions(selected_countries)
-st.write('Dimensions:', dimensions)
-fig, ax = plt.subplots(figsize=(15, 15))
-dimensions.plot.bar(ax=ax)
-st.pyplot(fig)
+raw_calculations.write('Country distances after normalisation:')
+raw_calculations.write(normalised_distances)
 
 show_clusters = st.checkbox('Show clusters', value=True)
 heatmap = visualisation.generate_heatmap(normalised_distances, show_clusters)
@@ -53,7 +58,8 @@ algo = distance_calculations.DimensionalityReductionAlgorithm[
     [e.name for e in distance_calculations.DimensionalityReductionAlgorithm])]
 coords = distance_calculations.generate_2d_coords(dimensions, algo)
 
-st.write(coords)
+raw_coordinates = st.expander("See raw data")
+raw_coordinates.write(coords)
 
 scatterplot = visualisation.generate_scatterplot(coords)
 st.pyplot(scatterplot)
