@@ -41,12 +41,14 @@ def generate_heatmap(distances, show_clusters: bool):
 def generate_scatterplot(coords):
     fig, ax = plt.subplots()
     cmap = cm.get_cmap(SCATTERPLOT_COLOR_MAP)
-    coords.plot.scatter(x=coords.columns[0], y=coords.columns[1], ax=ax, s=120, linewidth=0,
-                        c=range(len(coords)),  colormap=cmap)
+    coords.plot.scatter(x=coords.columns[0], y=coords.columns[1], ax=ax, s=120, linewidth=1,
+                        c=range(len(coords)),  colormap=cmap, alpha=0.5)
+    ax.grid(True, linestyle='--')
     for k, v in coords.iterrows():
         ax.annotate(k, v,
                     xytext=(10, -5), textcoords=TEXT_COORDS_OFFSET_POINTS,
                     family=FONT_FAMILY_SANS_SERIF, fontsize=SCATTERPLOT_FONT_SIZE, color=COLOR_DARKS_LATE_GREY)
+    ax.set_title("Cultural distance in 2D")
     return fig
 
 
@@ -92,7 +94,7 @@ def make_spider(col, title, color, dimensions):
     plt.ylim(0, MAX_VALUE_PER_DIMENSION)
 
     # Ind1
-    values=dimensions[title].values.flatten().tolist()
+    values = dimensions[title].values.flatten().tolist()
     values += values[:1]
     ax.plot(angles, values, color=color, linewidth=2, linestyle=SOLID_LINE_STYLE)
     ax.fill(angles, values, color=color, alpha=RADAR_PLOT_ALPHA_CHANNEL)
