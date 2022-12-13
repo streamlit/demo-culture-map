@@ -39,7 +39,7 @@ normalised_distances = distance_calculations.normalise_distance_matrix(distances
 st.write('Country distances after normalisation:', normalised_distances)
 
 dimensions = distance_calculations.compute_dimensions(selected_countries)
-st.write('Dimensions:', dimensions.transpose())
+st.write('Dimensions:', dimensions)
 fig, ax = plt.subplots(figsize=(15, 15))
 dimensions.plot.bar(ax=ax)
 st.pyplot(fig)
@@ -47,3 +47,18 @@ st.pyplot(fig)
 show_clusters = st.checkbox('Show clusters', value=True)
 heatmap = visualisation.generate_heatmap(normalised_distances, show_clusters)
 st.pyplot(heatmap)
+
+algo = distance_calculations.DimensionalityReductionAlgorithm[
+    st.selectbox('Select dimensionality reduction algorithm',
+    [e.name for e in distance_calculations.DimensionalityReductionAlgorithm])]
+coords = distance_calculations.generate_2d_coords(dimensions, algo)
+
+st.write(coords)
+
+fig, ax = plt.subplots()
+coords.plot.scatter(x=coords.columns[0], y=coords.columns[1], ax=ax)
+for k, v in coords.iterrows():
+    ax.annotate(k, v,
+                xytext=(10, -5), textcoords='offset points',
+                family='sans-serif', fontsize=9, color='darkslategrey')
+st.pyplot(fig)

@@ -1,8 +1,11 @@
+import enum
 import typing
 
 import pandas as pd
 from scipy.spatial import distance
 import streamlit as st
+from sklearn.decomposition import PCA
+from sklearn.manifold import TSNE
 
 from culture_map.country_data import types
 
@@ -19,6 +22,11 @@ SQUARE = 2
 PandasDataFrame = typing.TypeVar('pandas.core.frame.DataFrame')
 
 
+class DimensionalityReductionAlgorithm(enum.Enum):
+    PCA = 1
+    TSNE = 2
+
+
 def compute_dimensions(countries: types.Countries) -> PandasDataFrame:
     index = [country.title for country in countries]
     dimensions = {}
@@ -27,7 +35,7 @@ def compute_dimensions(countries: types.Countries) -> PandasDataFrame:
         for country in countries:
             row.append(getattr(country, dimension))
         dimensions[dimension] = row
-    return pd.DataFrame(dimensions, index=index)
+    return pd.DataFrame(dimensions, index=index).transpose()
 
 
 def compute_distance(country_from: types.CountryInfo, country_to: types.CountryInfo, distance_metric: str) -> float:
@@ -54,4 +62,13 @@ def compute_distances(countries: types.Countries, distance_metric: str) -> tuple
 @st.cache
 def normalise_distance_matrix(distances: PandasDataFrame, max_distance: float) -> PandasDataFrame:
     return distances.applymap(lambda x: x / max_distance * TO_PERCENT)
+
+
+def generate_2d_coords(dimensions: PandasDataFrame, algorithm: DimensionalityReductionAlgorithm) -> PandasDataFrame:
+    reduced = None
+    if algorithm == DimensionalityReductionAlgorithm.PCA:
+        reduced = PCA(n_components=2)
+    if algorithm == DimensionalityReductionAlgorithm.TSNE:
+        reduced = TSNE(n_components=2, perplexity=dimensions.shape[1] - 1, n_iter=300)
+    return pd.DataFrame(reduced.fit_transform(dimensions.transpose()), index=dimensions.columns)
 
