@@ -48,8 +48,13 @@ normalised_distances = distance_calculations.normalise_distance_matrix(distances
 raw_calculations.write('Country distances after normalisation:')
 raw_calculations.write(normalised_distances)
 
-show_clusters = st.checkbox('Show clusters', value=True)
-heatmap = visualisation.generate_heatmap(normalised_distances, show_clusters)
+col1, col2 = st.columns(2)
+with col1:
+    show_clusters = st.checkbox('Show clusters', value=True)
+with col2:
+    apply_normalisation = st.checkbox('Apply normalisation', value=True)
+
+heatmap = visualisation.generate_heatmap(normalised_distances if apply_normalisation else distances, show_clusters)
 st.pyplot(heatmap)
 
 algo = distance_calculations.DimensionalityReductionAlgorithm[
