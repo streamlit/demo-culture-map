@@ -75,7 +75,8 @@ def make_spider(col, title, color, dimensions):
     angles += angles[:1]
 
     # Initialise the spider plot
-    ax = plt.subplot(4, 4, col+1, polar=True)
+    side_len = math.ceil(math.sqrt(len(dimensions.columns)))
+    ax = plt.subplot(side_len, side_len, col+1, polar=True)
 
     # If you want the first axis to be on top:
     ax.set_theta_offset(math.pi / 2)

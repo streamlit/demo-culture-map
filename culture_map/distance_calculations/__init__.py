@@ -33,14 +33,14 @@ def compute_dimensions(countries: types.Countries) -> PandasDataFrame:
     for dimension in HOFSTEDE_DIMENSIONS:
         row = []
         for country in countries:
-            row.append(getattr(country, dimension))
+            row.append(max(getattr(country, dimension) or 0, 0))
         dimensions[dimension] = row
     return pd.DataFrame(dimensions, index=index).transpose()
 
 
 def compute_distance(country_from: types.CountryInfo, country_to: types.CountryInfo, distance_metric: str) -> float:
-    from_array = [max(getattr(country_from, dimension, 0), 0) for dimension in HOFSTEDE_DIMENSIONS]
-    to_array = [max(getattr(country_to, dimension, 0), 0) for dimension in HOFSTEDE_DIMENSIONS]
+    from_array = [max(getattr(country_from, dimension) or 0, 0) for dimension in HOFSTEDE_DIMENSIONS]
+    to_array = [max(getattr(country_to, dimension) or 0, 0) for dimension in HOFSTEDE_DIMENSIONS]
     return AVAILABLE_DISTANCES[distance_metric](from_array, to_array)
 
 
