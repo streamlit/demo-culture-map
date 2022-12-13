@@ -64,11 +64,12 @@ def normalise_distance_matrix(distances: PandasDataFrame, max_distance: float) -
     return distances.applymap(lambda x: x / max_distance * TO_PERCENT)
 
 
+@st.cache
 def generate_2d_coords(dimensions: PandasDataFrame, algorithm: DimensionalityReductionAlgorithm) -> PandasDataFrame:
     reduced = None
     if algorithm == DimensionalityReductionAlgorithm.PCA:
         reduced = PCA(n_components=2)
-    if algorithm == DimensionalityReductionAlgorithm.TSNE:
+    elif algorithm == DimensionalityReductionAlgorithm.TSNE:
         reduced = TSNE(n_components=2, perplexity=dimensions.shape[1] - 1, n_iter=300)
     return pd.DataFrame(reduced.fit_transform(dimensions.transpose()), index=dimensions.columns)
 

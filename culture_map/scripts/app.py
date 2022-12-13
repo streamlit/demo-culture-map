@@ -55,10 +55,5 @@ coords = distance_calculations.generate_2d_coords(dimensions, algo)
 
 st.write(coords)
 
-fig, ax = plt.subplots()
-coords.plot.scatter(x=coords.columns[0], y=coords.columns[1], ax=ax)
-for k, v in coords.iterrows():
-    ax.annotate(k, v,
-                xytext=(10, -5), textcoords='offset points',
-                family='sans-serif', fontsize=9, color='darkslategrey')
-st.pyplot(fig)
+scatterplot = visualisation.generate_scatterplot(coords)
+st.pyplot(scatterplot)
