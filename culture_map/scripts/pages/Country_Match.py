@@ -91,6 +91,7 @@ top_k = list(ranking.iloc[1:k+1].index)
 top_k_countries = [countries_dict[country_name] for country_name in top_k]
 
 dimensions = distance_calculations.compute_dimensions(top_k_countries)
+reference = distance_calculations.compute_dimensions([query])
 
-radar = visualisation.generate_radar_plot(dimensions)
+radar = visualisation.generate_radar_plot(dimensions, reference)
 st.pyplot(radar)

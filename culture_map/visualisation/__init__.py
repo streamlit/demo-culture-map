@@ -72,7 +72,7 @@ def generate_radar_plot(
 
     # Loop to plot
     for idx, country in enumerate(dimensions.columns):
-        make_spider(idx, country, my_palette(idx), dimensions)
+        make_spider(idx, country, my_palette(idx), dimensions, reference)
 
     fig.tight_layout(pad=RADAR_PLOTS_PADDING)
     return fig
@@ -82,7 +82,8 @@ def make_spider(
         col: int,
         title: str,
         color: str,
-        dimensions: distance_calculations.PandasDataFrame
+        dimensions: distance_calculations.PandasDataFrame,
+        reference: distance_calculations.PandasDataFrame | None = None
 ) -> None:
 
     # number of variable
@@ -115,6 +116,13 @@ def make_spider(
     values += values[:1]
     ax.plot(angles, values, color=color, linewidth=2, linestyle=SOLID_LINE_STYLE)
     ax.fill(angles, values, color=color, alpha=RADAR_PLOT_ALPHA_CHANNEL)
+
+    # Ind2
+    if reference is not None:
+        values = reference["distance"].values.flatten().tolist()
+        values += values[:1]
+        ax.plot(angles, values, color="red", linewidth=1, linestyle="dashed")
+        ax.fill(angles, values, color="red", alpha=0.1)
 
     # Add a title
     plt.title(title, size=RADAR_PLOT_TITLE_FONT_SIZE, color=color, y=RADAR_PLOT_TITLE_Y_POSITION)
