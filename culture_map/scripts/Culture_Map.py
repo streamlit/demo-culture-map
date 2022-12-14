@@ -59,7 +59,7 @@ st.pyplot(heatmap)
 
 algo = distance_calculations.DimensionalityReductionAlgorithm[
     st.selectbox('Select dimensionality reduction algorithm',
-    [e.name for e in distance_calculations.DimensionalityReductionAlgorithm])]
+                 [e.name for e in distance_calculations.DimensionalityReductionAlgorithm])]
 coords = distance_calculations.generate_2d_coords(dimensions, algo)
 
 raw_coordinates = st.expander("See raw data")
