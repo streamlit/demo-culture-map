@@ -8,5 +8,6 @@ COUNTRY_DATA: types.Countries = serialise.json_to_countries(download.download_co
 
 
 @st.cache
-def get_country_dict() -> dict[str, types.CountryInfo]:
+def get_country_dict(
+) -> dict[str, types.CountryInfo]:
     return {country.title: country for country in COUNTRY_DATA}

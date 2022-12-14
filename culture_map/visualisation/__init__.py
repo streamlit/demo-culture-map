@@ -31,7 +31,10 @@ RADAR_PLOT_ALPHA_CHANNEL = 0.4
 TEXT_COORDS_OFFSET_POINTS = 'offset points'
 
 
-def generate_heatmap(distances: distance_calculations.PandasDataFrame, show_clusters: bool) -> plt.Figure:
+def generate_heatmap(
+        distances: distance_calculations.PandasDataFrame,
+        show_clusters: bool
+) -> plt.Figure:
     fig, ax = plt.subplots()
     plt.xticks(rotation=DEFAULT_TEXT_ROTATION_DEGREES)
     if show_clusters:
@@ -42,7 +45,9 @@ def generate_heatmap(distances: distance_calculations.PandasDataFrame, show_clus
     return fig
 
 
-def generate_scatterplot(coords: distance_calculations.PandasDataFrame) -> plt.Figure:
+def generate_scatterplot(
+        coords: distance_calculations.PandasDataFrame
+) -> plt.Figure:
     fig, ax = plt.subplots()
     cmap = cm.get_cmap(SCATTERPLOT_COLOR_MAP)
     coords.plot.scatter(x=coords.columns[0], y=coords.columns[1], ax=ax, s=120, linewidth=1,
@@ -56,7 +61,10 @@ def generate_scatterplot(coords: distance_calculations.PandasDataFrame) -> plt.F
     return fig
 
 
-def generate_radar_plot(dimensions: distance_calculations.PandasDataFrame) -> plt.Figure:
+def generate_radar_plot(
+        dimensions: distance_calculations.PandasDataFrame,
+        reference: distance_calculations.PandasDataFrame | None = None
+) -> plt.Figure:
     fig = plt.figure(figsize=(RADAR_PLOT_SIZE/DISPLAY_DPI, RADAR_PLOT_SIZE/DISPLAY_DPI), dpi=DISPLAY_DPI)
 
     # Create a color palette:
@@ -70,7 +78,12 @@ def generate_radar_plot(dimensions: distance_calculations.PandasDataFrame) -> pl
     return fig
 
 
-def make_spider(col: int, title: str, color: str, dimensions: distance_calculations.PandasDataFrame) -> None:
+def make_spider(
+        col: int,
+        title: str,
+        color: str,
+        dimensions: distance_calculations.PandasDataFrame
+) -> None:
 
     # number of variable
     categories = list(dimensions.index)

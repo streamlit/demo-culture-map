@@ -27,7 +27,9 @@ class DimensionalityReductionAlgorithm(enum.Enum):
     TSNE = 2
 
 
-def compute_dimensions(countries: types.Countries) -> PandasDataFrame:
+def compute_dimensions(
+        countries: types.Countries
+) -> PandasDataFrame:
     index = [country.title for country in countries]
     dimensions = {}
     for dimension in HOFSTEDE_DIMENSIONS:
@@ -38,14 +40,21 @@ def compute_dimensions(countries: types.Countries) -> PandasDataFrame:
     return pd.DataFrame(dimensions, index=index).transpose()
 
 
-def compute_distance(country_from: types.CountryInfo, country_to: types.CountryInfo, distance_metric: str) -> float:
+def compute_distance(
+        country_from: types.CountryInfo,
+        country_to: types.CountryInfo,
+        distance_metric: str
+) -> float:
     from_array = [max(getattr(country_from, dimension) or 0, 0) for dimension in HOFSTEDE_DIMENSIONS]
     to_array = [max(getattr(country_to, dimension) or 0, 0) for dimension in HOFSTEDE_DIMENSIONS]
     return AVAILABLE_DISTANCES[distance_metric](from_array, to_array)
 
 
 @st.cache
-def compute_distances(countries: types.Countries, distance_metric: str) -> tuple[PandasDataFrame, float]:
+def compute_distances(
+        countries: types.Countries,
+        distance_metric: str
+) -> tuple[PandasDataFrame, float]:
     index = [country.title for country in countries]
     distances = {}
     max_distance = 0
@@ -60,12 +69,18 @@ def compute_distances(countries: types.Countries, distance_metric: str) -> tuple
 
 
 @st.cache
-def normalise_distance_matrix(distances: PandasDataFrame, max_distance: float) -> PandasDataFrame:
+def normalise_distance_matrix(
+        distances: PandasDataFrame,
+        max_distance: float
+) -> PandasDataFrame:
     return distances.applymap(lambda x: x / max_distance * TO_PERCENT)
 
 
 @st.cache
-def generate_2d_coords(dimensions: PandasDataFrame, algorithm: DimensionalityReductionAlgorithm) -> PandasDataFrame:
+def generate_2d_coords(
+        dimensions: PandasDataFrame,
+        algorithm: DimensionalityReductionAlgorithm
+) -> PandasDataFrame:
     reduced = None
     if algorithm == DimensionalityReductionAlgorithm.PCA:
         reduced = PCA(n_components=2)

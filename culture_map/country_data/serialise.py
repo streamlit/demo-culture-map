@@ -1,12 +1,16 @@
 from culture_map.country_data import types
 
 
-def json_to_countries(raw_data: types.JSONType) -> types.Countries:
+def json_to_countries(
+        raw_data: types.JSONType
+) -> types.Countries:
     return [serialise_country(country) for country in raw_data]
 
 
 # TODO: use json schema to the likes
-def serialise_country(raw_data: types.JSONType) -> types.CountryInfo:
+def serialise_country(
+        raw_data: types.JSONType
+) -> types.CountryInfo:
     return types.CountryInfo(
         raw_data['id'],
         raw_data['title'],
