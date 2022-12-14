@@ -19,6 +19,8 @@ MAX_VALUE_PER_DIMENSION = 100
 SOLID_LINE_STYLE = 'solid'
 SCATTERPLOT_COLOR_MAP = 'Spectral'
 SCATTERPLOT_FONT_SIZE = 9
+SCATTERPLOT_LINE_STYLE = '--'
+SCATTERPLOT_TITLE = "Cultural distance in 2D"
 RADAR_PLOTS_COLOR_MAP = "Set2"
 RADAR_PLOTS_PADDING = 1.5
 RADAR_PLOT_SIZE = 1000
@@ -45,12 +47,12 @@ def generate_scatterplot(coords: distance_calculations.PandasDataFrame) -> plt.F
     cmap = cm.get_cmap(SCATTERPLOT_COLOR_MAP)
     coords.plot.scatter(x=coords.columns[0], y=coords.columns[1], ax=ax, s=120, linewidth=1,
                         c=range(len(coords)),  colormap=cmap, alpha=0.5)
-    ax.grid(True, linestyle='--')
+    ax.grid(True, linestyle=SCATTERPLOT_LINE_STYLE)
     for k, v in coords.iterrows():
         ax.annotate(k, v,
                     xytext=(10, -5), textcoords=TEXT_COORDS_OFFSET_POINTS,
                     family=FONT_FAMILY_SANS_SERIF, fontsize=SCATTERPLOT_FONT_SIZE, color=COLOR_DARKS_LATE_GREY)
-    ax.set_title("Cultural distance in 2D")
+    ax.set_title(SCATTERPLOT_TITLE)
     return fig
 
 
@@ -68,7 +70,7 @@ def generate_radar_plot(dimensions: distance_calculations.PandasDataFrame) -> pl
     return fig
 
 
-def make_spider(col, title, color, dimensions: distance_calculations.PandasDataFrame) -> None:
+def make_spider(col: int, title: str, color: str, dimensions: distance_calculations.PandasDataFrame) -> None:
 
     # number of variable
     categories = list(dimensions.index)
