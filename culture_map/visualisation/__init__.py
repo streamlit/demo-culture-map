@@ -4,6 +4,8 @@ import matplotlib.pyplot as plt
 from matplotlib import cm
 import seaborn as sns
 
+from culture_map import distance_calculations
+
 DEFAULT_COLORMAP = "coolwarm_r"
 DEFAULT_FORMAT = '.0f'
 DEFAULT_TEXT_ROTATION_DEGREES = 80
@@ -27,7 +29,7 @@ RADAR_PLOT_ALPHA_CHANNEL = 0.4
 TEXT_COORDS_OFFSET_POINTS = 'offset points'
 
 
-def generate_heatmap(distances, show_clusters: bool):
+def generate_heatmap(distances: distance_calculations.PandasDataFrame, show_clusters: bool) -> plt.Figure:
     fig, ax = plt.subplots()
     plt.xticks(rotation=DEFAULT_TEXT_ROTATION_DEGREES)
     if show_clusters:
@@ -38,7 +40,7 @@ def generate_heatmap(distances, show_clusters: bool):
     return fig
 
 
-def generate_scatterplot(coords):
+def generate_scatterplot(coords: distance_calculations.PandasDataFrame) -> plt.Figure:
     fig, ax = plt.subplots()
     cmap = cm.get_cmap(SCATTERPLOT_COLOR_MAP)
     coords.plot.scatter(x=coords.columns[0], y=coords.columns[1], ax=ax, s=120, linewidth=1,
@@ -52,7 +54,7 @@ def generate_scatterplot(coords):
     return fig
 
 
-def generate_radar_plot(dimensions):
+def generate_radar_plot(dimensions: distance_calculations.PandasDataFrame) -> plt.Figure:
     fig = plt.figure(figsize=(RADAR_PLOT_SIZE/DISPLAY_DPI, RADAR_PLOT_SIZE/DISPLAY_DPI), dpi=DISPLAY_DPI)
 
     # Create a color palette:
@@ -66,7 +68,7 @@ def generate_radar_plot(dimensions):
     return fig
 
 
-def make_spider(col, title, color, dimensions):
+def make_spider(col, title, color, dimensions: distance_calculations.PandasDataFrame) -> None:
 
     # number of variable
     categories = list(dimensions.index)
