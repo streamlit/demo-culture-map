@@ -17,7 +17,7 @@ st.title("🌎 Culture map app")
 
 st.header("The 6-D model of national culture 🗺️")
 
-st.markdown(open('culture_map/scripts/intro.md').read())
+st.markdown(open('intro.md').read())
 
 selected_countries_names = st.multiselect(
     'Choose countries you want to compare',
