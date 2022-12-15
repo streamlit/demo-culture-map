@@ -7,6 +7,13 @@ Since the dimension data he collected is downloadable and available to researche
 try to create a streamlit-based interactive application which can explore cultural distances between countries or 
 assign a country to a person based on his/hers position across the 6 proposed dimensions.
 
+* Power distance (PDI)
+* Individualism (IDV)
+* Masculinity (MAS)
+* Uncertainty avoidance (UAI)
+* Long term orientation (LTO)
+* Indulgence (IND)
+
 ### Disclaimer ⚠️
 
 It's important to keep in mind that there are many counties without validated scores and in that case only educated guesses are provided.

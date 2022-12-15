@@ -20,7 +20,7 @@ st.header("The 6-D model of national culture 🗺️")
 st.markdown(open('intro.md').read())
 
 selected_countries_names = st.multiselect(
-    'Choose countries you want to compare',
+    'Choose countries you want to compare:',
     all_countries_names,
     st.session_state["default_countries"])
 
@@ -33,8 +33,10 @@ raw_data.write('Dimensions:')
 raw_data.write(dimensions)
 
 radar = visualisation.generate_radar_plot(dimensions)
+st.write("Let's see each selected country on a radar plot to explore each of the 6 dimensions:")
 st.pyplot(radar)
 
+st.write("Now let's create a single number as a distance between countries:")
 distance_metric = st.selectbox('What distance metric would you like to use?',
                                list(distance_calculations.AVAILABLE_DISTANCES.keys()))
 
@@ -57,6 +59,7 @@ with col2:
 heatmap = visualisation.generate_heatmap(normalised_distances if apply_normalisation else distances, show_clusters)
 st.pyplot(heatmap)
 
+st.write("And now let's apply dimensionality reduction and plot countries in 2D by their cultural distance")
 algo = distance_calculations.DimensionalityReductionAlgorithm[
     st.selectbox('Select dimensionality reduction algorithm',
                  [e.name for e in distance_calculations.DimensionalityReductionAlgorithm])]

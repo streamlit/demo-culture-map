@@ -11,6 +11,8 @@ st.title("Culture match")
 
 st.header("Find your top matching countries")
 
+st.subheader("Answer the 6 following questions")
+
 PDI_HELP = "Power distance index (PDI): The power distance index is defined as " \
            "\"the extent to which the less powerful members of organizations and institutions (like the family) " \
            "accept and expect that power is distributed unequally\". " \
@@ -55,28 +57,28 @@ IND_HELP = "Indulgence vs. restraint (IND): This dimension refers to the degree 
            "fun\". Its counterpart is defined as \"a society that controls gratification of needs and regulates it " \
            "by means of strict social norms\"."
 
-st.text("1. Power distance")
+st.text("1. Power distance (PDI)")
 pdi = st.slider('To which extent you accept that individuals in societies are not equal?',
                 0, 100, 50, help=PDI_HELP, key="pdi")
 
-st.text("2. Individualism")
+st.text("2. Individualism (IDV)")
 idv = st.slider('How independent you would like to be in your society?',
                 0, 100, 50, help=IDV_HELP, key="idv")
 
-st.text("3. Masculinity")
+st.text("3. Masculinity (MAS)")
 mas = st.slider('How much are you driven by competition, achievement and success and able to sacrifice caring for '
                 'others and quality of life?',
                 0, 100, 50, help=MAS_HELP, key="mas")
 
-st.text("4. Uncertainty avoidance")
+st.text("4. Uncertainty avoidance (UAI)")
 uai = st.slider('To which extent you feel threatened by ambiguous or unknown situations and try to avoid them ?',
                 0, 100, 50, help=UAI_HELP, key="uai")
 
-st.text("5. Long term orientation")
+st.text("5. Long term orientation (LTO)")
 lto = st.slider('How much do you consider past when dealing with future and present challenges?',
                 0, 100, 50, help=LTO_HELP, key="lto")
 
-st.text("6. Indulgence")
+st.text("6. Indulgence (IND)")
 ind = st.slider('To which extent you would like to express your desires and impulses??',
                 0, 100, 50, help=IND_HELP, key="ind")
 
@@ -103,6 +105,7 @@ k = st.number_input('How many top countries to display?', value=4, min_value=1, 
 distances, max_distance = distance_calculations.compute_distances(all_countries, distance_metric)
 normalised_distances = distance_calculations.normalise_distance_matrix(distances, max_distance)
 ranking = normalised_distances.iloc[:, -1].sort_values()
+st.subheader("Your top countries to live in")
 st.write(ranking.iloc[1:k+1])
 top_k = list(ranking.iloc[1:k+1].index)
 
@@ -112,4 +115,5 @@ dimensions = distance_calculations.compute_dimensions(top_k_countries)
 reference = distance_calculations.compute_dimensions([query])
 
 radar = visualisation.generate_radar_plot(dimensions, reference)
+st.subheader("Red shape depict your preferences against each of the top countries")
 st.pyplot(radar)
