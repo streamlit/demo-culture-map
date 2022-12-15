@@ -1,3 +1,5 @@
+import random
+
 import streamlit as st
 
 from culture_map import country_data
@@ -54,25 +56,41 @@ IND_HELP = "Indulgence vs. restraint (IND): This dimension refers to the degree 
            "by means of strict social norms\"."
 
 st.text("1. Power distance")
-pdi = st.slider('To which extent you accept that individuals in societies are not equal?', 0, 100, 50, help=PDI_HELP)
+pdi = st.slider('To which extent you accept that individuals in societies are not equal?',
+                0, 100, 50, help=PDI_HELP, key="pdi")
 
 st.text("2. Individualism")
-idv = st.slider('How independent you would like to be in your society?', 0, 100, 50, help=IDV_HELP)
+idv = st.slider('How independent you would like to be in your society?',
+                0, 100, 50, help=IDV_HELP, key="idv")
 
 st.text("3. Masculinity")
 mas = st.slider('How much are you driven by competition, achievement and success and able to sacrifice caring for '
-                'others and quality of life?', 0, 100, 50, help=MAS_HELP)
+                'others and quality of life?',
+                0, 100, 50, help=MAS_HELP, key="mas")
 
 st.text("4. Uncertainty avoidance")
 uai = st.slider('To which extent you feel threatened by ambiguous or unknown situations and try to avoid them ?',
-                0, 100, 50, help=UAI_HELP)
+                0, 100, 50, help=UAI_HELP, key="uai")
 
 st.text("5. Long term orientation")
 lto = st.slider('How much do you consider past when dealing with future and present challenges?',
-                0, 100, 50, help=LTO_HELP)
+                0, 100, 50, help=LTO_HELP, key="lto")
 
 st.text("6. Indulgence")
-ind = st.slider('To which extent you would like to express your desires and impulses??', 0, 100, 50, help=IND_HELP)
+ind = st.slider('To which extent you would like to express your desires and impulses??',
+                0, 100, 50, help=IND_HELP, key="ind")
+
+
+def randomisation_callback():
+    st.session_state.pdi = random.randint(1, 100)
+    st.session_state.idv = random.randint(1, 100)
+    st.session_state.mas = random.randint(1, 100)
+    st.session_state.uai = random.randint(1, 100)
+    st.session_state.lto = random.randint(1, 100)
+    st.session_state.ind = random.randint(1, 100)
+
+
+randomised = st.button('Randomise answers', on_click=randomisation_callback)
 
 query = types.CountryInfo(500, "distance", "distance", pdi, idv, mas, uai, lto, ind, ind, None)
 
