@@ -4,8 +4,7 @@ import typing
 import pandas as pd
 from scipy.spatial import distance
 import streamlit as st
-from sklearn.decomposition import PCA
-from sklearn.manifold import TSNE
+from sklearn import decomposition
 
 from culture_map.country_data import types
 
@@ -14,17 +13,21 @@ AVAILABLE_DISTANCES = {
     "Euclidean": distance.euclidean,
     "Cosine": distance.cosine,
     "Manhattan": distance.cityblock,
-    "Correlation": distance.correlation
-
+    "Correlation": distance.correlation,
 }
+
+AVAILABLE_DECOMPOSITION = {
+    'PCA': decomposition.PCA,
+    'FastICA': decomposition.FastICA,
+    'NMF': decomposition.NMF,
+    "MiniBatchSparsePCA": decomposition.MiniBatchSparsePCA,
+    "SparsePCA": decomposition.SparsePCA,
+    "TruncatedSVD": decomposition.TruncatedSVD
+}
+
 TO_PERCENT = 100.0
 SQUARE = 2
 PandasDataFrame = typing.TypeVar('pandas.core.frame.DataFrame')
-
-
-class DimensionalityReductionAlgorithm(enum.Enum):
-    PCA = 1
-    TSNE = 2
 
 
 def compute_dimensions(
@@ -79,12 +82,12 @@ def normalise_distance_matrix(
 @st.cache
 def generate_2d_coords(
         dimensions: PandasDataFrame,
-        algorithm: DimensionalityReductionAlgorithm
+        algorithm: str
 ) -> PandasDataFrame:
-    reduced = None
-    if algorithm == DimensionalityReductionAlgorithm.PCA:
-        reduced = PCA(n_components=2)
-    elif algorithm == DimensionalityReductionAlgorithm.TSNE:
-        reduced = TSNE(n_components=2, perplexity=dimensions.shape[1] - 1, n_iter=300)
-    return pd.DataFrame(reduced.fit_transform(dimensions.transpose()), index=dimensions.columns)
+    algo = AVAILABLE_DECOMPOSITION[algorithm]
+    reduced = algo(n_components=2)
+    ret = pd.DataFrame(reduced.fit_transform(dimensions.transpose()), index=dimensions.columns)
+    if algorithm in ('FastICA', 'NMF'):
+        return ret.applymap(lambda x: x * TO_PERCENT)
+    return ret
 

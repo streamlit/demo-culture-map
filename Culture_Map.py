@@ -60,9 +60,7 @@ heatmap = visualisation.generate_heatmap(normalised_distances if apply_normalisa
 st.pyplot(heatmap)
 
 st.write("And now let's apply dimensionality reduction and plot countries in 2D by their cultural distance")
-algo = distance_calculations.DimensionalityReductionAlgorithm[
-    st.selectbox('Select dimensionality reduction algorithm',
-                 [e.name for e in distance_calculations.DimensionalityReductionAlgorithm])]
+algo = st.selectbox('Select dimensionality reduction algorithm', list(distance_calculations.AVAILABLE_DECOMPOSITION.keys()))
 coords = distance_calculations.generate_2d_coords(dimensions, algo)
 
 raw_coordinates = st.expander("See raw data")
