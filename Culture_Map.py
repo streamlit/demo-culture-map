@@ -26,6 +26,21 @@ selected_countries_names = st.multiselect(
 
 selected_countries = [country for country in all_countries.values() if country.title in selected_countries_names]
 
+def country_group_callback():
+    chosen_group = [
+        group_name for group_name, selected in st.session_state.items() if
+        selected and group_name in country_data.COUNTRY_GROUPS][0]
+    countries = country_data.GROUPS_TO_COUNTRIES[chosen_group]
+    st.session_state["default_countries"] = countries
+
+
+st.write("Or choose from predefined country group:")
+columns = st.columns(len(country_data.COUNTRY_GROUPS))
+for idx, column in enumerate(columns):
+    with column:
+        group = country_data.COUNTRY_GROUPS[idx]
+        st.button(group, key=group, on_click=country_group_callback)
+
 raw_data = st.expander("See raw data about selected countries")
 
 dimensions = distance_calculations.compute_dimensions(selected_countries)

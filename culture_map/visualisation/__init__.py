@@ -62,7 +62,7 @@ def generate_scatterplot(
                       x_offset=10, y_offset=10, source=source, render_mode='canvas')
     fig.add_layout(labels)
     for country_name, country_coords in coords.iterrows():
-        img = ImageURL(url=dict(value=COUNTRY_URLS[country_name.replace('*', '')]), x=country_coords[0],
+        img = ImageURL(url=dict(value=COUNTRY_URLS[country_name]), x=country_coords[0],
                        y=country_coords[1], w=5, h=2, anchor="center")
         fig.add_glyph(source, img)
     return fig

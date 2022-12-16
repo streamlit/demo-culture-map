@@ -13,7 +13,7 @@ def serialise_country(
 ) -> types.CountryInfo:
     return types.CountryInfo(
         raw_data['id'],
-        raw_data['title'],
+        raw_data['title'].replace('*', ''),
         raw_data['slug'],
         int(raw_data['pdi']) if raw_data['pdi'] else None,
         int(raw_data['idv']) if raw_data['idv'] else None,
