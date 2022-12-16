@@ -1,7 +1,9 @@
 import math
 
+from bokeh.plotting import figure
+from bokeh.models import ColumnDataSource, LabelSet, ImageURL
 import matplotlib.pyplot as plt
-from matplotlib import cm
+from culture_map.visualisation.country_urls import COUNTRY_URLS
 import seaborn as sns
 
 from culture_map import distance_calculations
@@ -48,16 +50,21 @@ def generate_heatmap(
 def generate_scatterplot(
         coords: distance_calculations.PandasDataFrame
 ) -> plt.Figure:
-    fig, ax = plt.subplots()
-    cmap = cm.get_cmap(SCATTERPLOT_COLOR_MAP)
-    coords.plot.scatter(x=coords.columns[0], y=coords.columns[1], ax=ax, s=120, linewidth=1,
-                        c=range(len(coords)),  colormap=cmap, alpha=0.5)
-    ax.grid(True, linestyle=SCATTERPLOT_LINE_STYLE)
-    for k, v in coords.iterrows():
-        ax.annotate(k, v,
-                    xytext=(10, -5), textcoords=TEXT_COORDS_OFFSET_POINTS,
-                    family=FONT_FAMILY_SANS_SERIF, fontsize=SCATTERPLOT_FONT_SIZE, color=COLOR_DARKS_LATE_GREY)
-    ax.set_title(SCATTERPLOT_TITLE)
+    data = {str(key): val for key, val in coords.to_dict(orient="list").items()}
+    data["names"] = coords.index
+    max_x, max_y = max(data['0']), max(data['1'])
+    min_x, min_y = min(data['0']), min(data['1'])
+    x_margin, y_margin = (max_x - min_x) * 0.2, (max_y - min_y) * 0.2
+    fig = figure(width=800, height=800, x_range=(min_x - x_margin, max_x + x_margin),
+                 y_range=(min_y - y_margin, max_y + y_margin), title="Culture distance in 2D")
+    source = ColumnDataSource(data=data)
+    labels = LabelSet(x='0', y='1', text='names',
+                      x_offset=10, y_offset=10, source=source, render_mode='canvas')
+    fig.add_layout(labels)
+    for country_name, country_coords in coords.iterrows():
+        img = ImageURL(url=dict(value=COUNTRY_URLS[country_name.replace('*', '')]), x=country_coords[0],
+                       y=country_coords[1], w=5, h=2, anchor="center")
+        fig.add_glyph(source, img)
     return fig
 
 

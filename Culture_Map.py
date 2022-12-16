@@ -69,4 +69,4 @@ raw_coordinates = st.expander("See raw data")
 raw_coordinates.write(coords)
 
 scatterplot = visualisation.generate_scatterplot(coords)
-st.pyplot(scatterplot)
+st.bokeh_chart(scatterplot)
