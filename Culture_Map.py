@@ -47,6 +47,14 @@ dimensions = distance_calculations.compute_dimensions(selected_countries)
 raw_data.write('Dimensions:')
 raw_data.write(dimensions)
 
+dimension_tabs = st.tabs([dim.upper() for dim in distance_calculations.HOFSTEDE_DIMENSIONS[:-1]])
+for idx, tab in enumerate(dimension_tabs):
+    with tab:
+        dimension = distance_calculations.HOFSTEDE_DIMENSIONS[idx]
+        st.header(dimension.upper())
+        choropleth = visualisation.generate_choropleth(dimensions, dimension)
+        st.plotly_chart(choropleth)
+
 radar = visualisation.generate_radar_plot(dimensions)
 st.write("Let's see each selected country on a radar plot to explore each of the 6 dimensions:")
 st.pyplot(radar)

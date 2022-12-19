@@ -5,6 +5,7 @@ from bokeh.models import ColumnDataSource, LabelSet, ImageURL
 import matplotlib.pyplot as plt
 from culture_map.visualisation.country_urls import COUNTRY_URLS
 import seaborn as sns
+import plotly.express as px
 
 from culture_map import distance_calculations
 
@@ -82,6 +83,19 @@ def generate_radar_plot(
         make_spider(idx, country, my_palette(idx), dimensions, reference)
 
     fig.tight_layout(pad=RADAR_PLOTS_PADDING)
+    return fig
+
+
+def generate_choropleth(
+        dimensions: distance_calculations.PandasDataFrame,
+        dimension_name: str
+) -> plt.Figure:
+    transposed = dimensions.transpose()
+    transposed.reset_index(inplace=True)
+    transposed = transposed.rename(columns={'index': 'country'})
+    print(transposed)
+    fig = px.choropleth(transposed, locationmode="country names", locations="country", color=dimension_name,
+                        hover_name="country", color_continuous_scale=px.colors.sequential.Plasma)
     return fig
 
 
