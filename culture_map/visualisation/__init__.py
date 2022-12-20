@@ -93,7 +93,6 @@ def generate_choropleth(
     transposed = dimensions.transpose()
     transposed.reset_index(inplace=True)
     transposed = transposed.rename(columns={'index': 'country'})
-    print(transposed)
     fig = px.choropleth(transposed, locationmode="country names", locations="country", color=dimension_name,
                         hover_name="country", color_continuous_scale=px.colors.sequential.Plasma)
     return fig
