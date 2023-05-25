@@ -1,4 +1,4 @@
-streamlit~=1.15.2
+streamlit~=1.22.0
 requests~=2.28.1
 setuptools~=65.6.3
 pandas~=1.5.2

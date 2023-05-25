@@ -1,4 +1,3 @@
-import enum
 import typing
 
 import pandas as pd
@@ -53,7 +52,7 @@ def compute_distance(
     return AVAILABLE_DISTANCES[distance_metric](from_array, to_array)
 
 
-@st.cache
+@st.cache_data
 def compute_distances(
         countries: types.Countries,
         distance_metric: str
@@ -71,7 +70,7 @@ def compute_distances(
     return pd.DataFrame(distances, index=index), max_distance
 
 
-@st.cache
+@st.cache_data
 def normalise_distance_matrix(
         distances: PandasDataFrame,
         max_distance: float
@@ -79,7 +78,7 @@ def normalise_distance_matrix(
     return distances.applymap(lambda x: x / max_distance * TO_PERCENT)
 
 
-@st.cache
+@st.cache_data
 def generate_2d_coords(
         dimensions: PandasDataFrame,
         algorithm: str

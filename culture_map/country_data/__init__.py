@@ -4,9 +4,10 @@ from culture_map.country_data import download
 from culture_map.country_data import serialise
 from culture_map.country_data import types
 
-COUNTRY_DATA: types.Countries = serialise.json_to_countries(download.download_country_data())
+COUNTRY_DATA: types.Countries = serialise.json_to_countries(download.load_country_data())
 
-@st.cache
+
+@st.cache_data
 def get_country_dict(
 ) -> dict[str, types.CountryInfo]:
     return {country.title: country for country in COUNTRY_DATA}
